@@ -1,0 +1,45 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: static
+spec:
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: static
+    spec:
+      containers:
+      - args:
+        - bash
+        - -c
+        - 'bundle exec rake assets:precompile && bundle exec unicorn -p 80'
+        env:
+        - name: DISABLE_DATABASE_ENVIRONMENT_CHECK
+          value: "1"
+        - name: GDS_SSO_STRATEGY
+          value: mock
+        - name: GOVUK_APP_DOMAIN
+          value: default.svc.cluster.local
+        - name: GOVUK_ASSET_ROOT
+          value: http://static.127.0.0.1.nip.io
+        - name: GOVUK_WEBSITE_ROOT
+          value: http://www.127.0.0.1.nip.io
+        - name: RAILS_ENV
+          value: production
+        - name: RAILS_SERVE_STATIC_FILES
+          value: "true"
+        - name: SECRET_KEY_BASE
+          value: 875c6bf4c48da9bb41f4cfd25d09bf5e2a62d88b39efc4bd9c498e6c8f61e4df740af87386f97269525e01b5f74402512eb6a4723882579f10aa95f6e2971fc2
+        - name: SECRET_TOKEN
+          value: 875c6bf4c48da9bb41f4cfd25d09bf5e2a62d88b39efc4bd9c498e6c8f61e4df740af87386f97269525e01b5f74402512eb6a4723882579f10aa95f6e2971fc2
+        - name: GOVUK_ASSET_HOST
+          value: static.127.0.0.1.nip.io
+        image: govuk/static:deployed-to-production
+        name: static
+        ports:
+        - containerPort: 80
+        resources: {}
+      restartPolicy: Always
