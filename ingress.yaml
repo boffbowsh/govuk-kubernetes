@@ -1,0 +1,30 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: govuk-ingress
+  annotations:
+    ingress.kubernetes.io/ssl-redirect: "false"
+    ingress.kubernetes.io/enable-cors: "true"
+spec:
+  backend:
+    serviceName: government-frontend
+    servicePort: 80
+  rules:
+  - host: static.127.0.0.1.nip.io
+    http:
+      paths:
+      - path: /static
+        backend:
+          serviceName: static
+          servicePort: 80
+      - path: /government
+        backend:
+          serviceName: government-frontend
+          servicePort: 80
+  - host: government-frontend.127.0.0.1.nip.io
+    http:
+      paths:
+      - path: /government
+        backend:
+          serviceName: government-frontend
+          servicePort: 80
