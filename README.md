@@ -18,17 +18,19 @@ helm install --name govuk stable/mongodb
 ```
 kubectl apply -Rf .
 ```
+6. Import Content Store mongodb data:
+```
+./import_mongo.sh /Users/paulbowsher/code/govuk-puppet/development-vm/replication/backups/2018-01-03/mongo/api-mongo-1.api.integration/2018-01-03_06h46m.Wednesday/content_store_production content_store
+```
 
 Visit http://government-frontend.127.0.0.1.nip.io/government/publications/autumn-budget-2017-documents
 
 ## Supported services
 
-- Router
 - Content Store
 - Government Frontend
 - Static
 
 ## TODO
 
-- Import MongoDB data
 - Publishing API
